@@ -1,0 +1,29 @@
+services:
+  vector-drift-monitor:
+    build: .
+    image: ghcr.io/ramdragneel01/vector-drift-monitor:dev
+    container_name: vector-drift-monitor
+    restart: unless-stopped
+    ports:
+      - "8091:8091"
+    environment:
+      VDM_HOST: 0.0.0.0
+      VDM_PORT: 8091
+      VDM_LOG_LEVEL: INFO
+      VDM_STORAGE_BACKEND: file
+      VDM_STORAGE_PATH: /data/snapshots
+      VDM_THRESHOLD_CENTROID_SHIFT: "0.10"
+      VDM_THRESHOLD_MEAN_NORM_SHIFT: "0.10"
+      VDM_THRESHOLD_KS_PVALUE: "0.01"
+      VDM_THRESHOLD_JS_DIVERGENCE: "0.10"
+      VDM_ALERT_WEBHOOK_URL: ${VDM_ALERT_WEBHOOK_URL:-}
+    volumes:
+      - vdm-data:/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8091/health',timeout=3).status==200 else 1)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  vdm-data: {}

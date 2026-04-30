@@ -1,0 +1,59 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vector-drift-monitor"
+version = "0.1.0"
+description = "Production-grade embedding-drift detection for vector databases."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+authors = [{ name = "Ram Prakash Dhulipudi", email = "ramprakashdhulipudi@gmail.com" }]
+keywords = ["vector-database", "drift-detection", "rag", "mlops", "observability"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Framework :: FastAPI",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+  "fastapi>=0.115.0",
+  "uvicorn[standard]>=0.30.6",
+  "pydantic>=2.9.2",
+  "pydantic-settings>=2.5.2",
+  "numpy>=1.26",
+  "scipy>=1.11",
+  "httpx>=0.27.2",
+  "structlog>=24.4",
+  "prometheus-client>=0.20",
+  "click>=8.1.7",
+  "rich>=13.7",
+]
+
+[project.scripts]
+vector-drift-monitor = "vector_drift_monitor.__main__:main"
+vdm = "vector_drift_monitor.cli:cli"
+
+[project.urls]
+Homepage = "https://github.com/Ramdragneel01/vector-drift-monitor"
+Issues = "https://github.com/Ramdragneel01/vector-drift-monitor/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+asyncio_mode = "auto"
+
+[tool.ruff]
+line-length = 110
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["E501"]
